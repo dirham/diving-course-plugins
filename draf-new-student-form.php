@@ -2,7 +2,7 @@
 
 function form_student_form_course() {
 	global $wpdb;
-	$country = $wpdb->get_results("SELECT name FROM wp_country");
+	$country = $wpdb->get_results("SELECT name FROM ".$wpdb->prefix."country");
 	echo "<h3>Participan Form - Fill your information</h3>";
 	echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post" enctype="multipart/form-data" id="formtlp" >';
 	echo '<p>';
@@ -91,7 +91,7 @@ function save_student_info() {
 
   //pengecekan email dan key dari pendaftar
 
-  $valid_key = $wpdb->get_results("select email_pelajar from wp_register_pelajar WHERE key_user_register = '$student_key'");
+  $valid_key = $wpdb->get_results("select email_pelajar from ".$wpdb->prefix."register_pelajar WHERE key_user_register = '$student_key'");
 
   	//pasang penanganan inputan foto
 
@@ -191,7 +191,7 @@ function save_student_info() {
 				        <p>Please choose your country</p>
 				    </div>';
 		}else{
-	    $insert = $wpdb->insert('wp_registered_pelajar', array('id'=>'', 'nama_pelajar'=>$name,'email_pelajar'=>$email,'phone'=>$phone,'jkel'=>$genre,'city'=>$city,'negara'=>$country,'alamat'=>$address,'message'=>$message,'email_pengajar'=>$fromEmail, 'pengajar'=>$pengajar,'key_user_register'=>$student_key, 'profil_picture_id'=>$attach_id ), array('%d', '%s', '%s', '%s','%s','%s','%s','%s','%s','%s', '%s','%d'));
+	    $insert = $wpdb->insert($wpdb->prefix.'registered_pelajar', array('id'=>'', 'nama_pelajar'=>$name,'email_pelajar'=>$email,'phone'=>$phone,'jkel'=>$genre,'city'=>$city,'negara'=>$country,'alamat'=>$address,'message'=>$message,'email_pengajar'=>$fromEmail, 'pengajar'=>$pengajar,'key_user_register'=>$student_key, 'profil_picture_id'=>$attach_id ), array('%d', '%s', '%s', '%s','%s','%s','%s','%s','%s','%s', '%s','%d'));
 		}
       // jika berhasil melakukan penyimpanan data maka lakukan pengiriman email
       if($insert){

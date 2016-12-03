@@ -31,7 +31,7 @@ function form_examp_pointing() {
       echo "<input type='hidden' name='exam_names' value='".json_encode($exam_names)."'>";
       echo "<tr>";
       $a = 0;
-      $multi_student = $wpdb->get_results("select id, nama_pelajar from wp_registered_pelajar WHERE id IN ($multi_id)");
+      $multi_student = $wpdb->get_results("select id, nama_pelajar from ".$wpdb->prefix."registered_pelajar WHERE id IN ($multi_id)");
       foreach ($multi_student as $r ) {
         echo "<td class='manage-column ss-list-width'>$r->nama_pelajar
         <input type='hidden' value='$r->id' name='x-id[]'></td>";
@@ -44,7 +44,8 @@ function form_examp_pointing() {
 // echo "<br><br><br>".$i;
 
         }
-        echo "<td class='manage-column ss-list-width'><a href='#'>Delete Participan</a></td>";
+        echo "<td class='manage-column ss-list-width'><input type='submit' name='delete' value='Delete#$r->id' ></td>";
+        // echo "<td class='manage-column ss-list-width'><a href='/?del_id=2'>Delete Participan</a></td>";
         echo "</tr>";
         $a++;
       }
@@ -64,7 +65,7 @@ function form_examp_pointing() {
   }
   else{
     $pid= '';
-    $one_student = $wpdb->get_results("select id, nama_pelajar from wp_registered_pelajar WHERE id = '$student_id'");
+    $one_student = $wpdb->get_results("select id, nama_pelajar from ".$wpdb->prefix."registered_pelajar WHERE id = '$student_id'");
     foreach ($one_student as $r ) {
       echo "<td class='manage-column ss-list-width'>$r->nama_pelajar <input type='hidden' value='$r->nama_pelajar' name='x-name'>
       <input type='hidden' value='$r->id' name='one_insert'></td>";
@@ -73,6 +74,7 @@ function form_examp_pointing() {
     for ($i=0; $i<$exam_total; $i++){
       echo "<td class='manage-column ss-list-width'><input type='checkbox' id='gift$i' name='exm[]' value='".$exam_names[$i]->id."'>Check if pass<input type='hidden' id='gift-true$i' name='poin[]' value='".$pid."#".$exam_names[$i]->id."#0'></td>";
     }
+    echo "<td class='manage-column ss-list-width'><input type='submit' name='delete' value='Delete#$r->id' ></td>";
     ?>
     <!--  jquery  -->
 
@@ -115,7 +117,7 @@ function save_courese_result() {
       // mendapatkan input setip exam
       $a = 0;
       //persiapann insert multi
-      $sql_in = "INSERT INTO wp_exam_poin
+      $sql_in = "INSERT INTO ".$wpdb->prefix."exam_poin
               (id, participan_id, exam_id, status)
               VALUES ";
       foreach( $nameexam_post as $input_chck ){
@@ -144,7 +146,8 @@ function save_courese_result() {
 
     }else {
       //jika hanya satu
-      $sqlin = "INSERT INTO wp_exam_poin
+      $table = $wpdb->prefix . "exam_poin";
+      $sqlin = "INSERT INTO $table
               (id, participan_id, exam_id, status)
               VALUES ";
       $examstatus = $_POST['poin'];
@@ -164,6 +167,33 @@ function save_courese_result() {
     }
   // print_r($nameexam_post);
   }
+
+      if( isset($_POST['delete']) ){
+        $table_name     = $wpdb->prefix . "registered_pelajar";
+        $whatIWant = substr($_POST['delete'], strpos($_POST['delete'], "#") + 1);
+        echo $whatIWant;
+        if (isset($whatIWant)) {
+          $delete = $wpdb->query($wpdb->prepare("DELETE FROM $table_name WHERE id = %d", $whatIWant));
+          if($delete){
+            ?>
+            <div class="notice notice-success is-dismissible">
+              <p><?php _e( 'Done!', 'Participan has been deleted' ); ?>
+
+              </p>
+          </div>
+          <?php
+        }else {
+          ?>
+          <div class="notice notice-success is-dismissible">
+              <p><?php _e( 'Woops!', 'can not delete Participan' ); ?>
+                <!-- <a href="javascript:history.go(-1)">Back</a> -->
+              </p>
+          </div>
+          <?php
+        }
+      }
+    }
+
 }
 
 function exam_call(){

@@ -20,11 +20,12 @@ $table_name = $wpdb->prefix . "register_pelajar";
 $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
 $limit = 5; // number of rows in page
 $offset = ( $pagenum - 1 ) * $limit;
-$sql_count = "SELECT COUNT(*) FROM wp_exam_poin JOIN complyted_exam ON complyted_exam.id = wp_exam_poin.exam_id JOIN wp_registered_pelajar ON wp_registered_pelajar.id = wp_exam_poin.participan_id";
+$sql_count = "SELECT COUNT(*) FROM ".$wpdb->prefix."exam_poin JOIN complyted_exam ON complyted_exam.id = ".$wpdb->prefix."exam_poin.exam_id JOIN ".$wpdb->prefix."registered_pelajar ON ".$wpdb->prefix."registered_pelajar.id = ".$wpdb->prefix."exam_poin.participan_id";
 $total = $wpdb->get_var( $sql_count );
 
 $num_of_pages = ceil( $total / $limit );
-$sql_oke = "SELECT wp_registered_pelajar.nama_pelajar, wp_registered_pelajar.alamat, wp_registered_pelajar.jkel , wp_registered_pelajar.negara, wp_registered_pelajar.email_pengajar, wp_registered_pelajar.email_pelajar, complyted_exam.exam_name, CASE wp_exam_poin.status WHEN 0 THEN 'FAILED' WHEN 1 THEN 'PASS' END AS Status FROM wp_exam_poin JOIN complyted_exam ON complyted_exam.id = wp_exam_poin.exam_id JOIN wp_registered_pelajar ON wp_registered_pelajar.id = wp_exam_poin.participan_id ORDER BY wp_registered_pelajar.id LIMIT $offset, $limit";
+$sql_oke = "SELECT ".$wpdb->prefix."registered_pelajar.nama_pelajar, ".$wpdb->prefix."registered_pelajar.alamat, ".$wpdb->prefix."registered_pelajar.jkel , ".$wpdb->prefix."registered_pelajar.negara, ".$wpdb->prefix."registered_pelajar.email_pengajar, ".$wpdb->prefix."registered_pelajar.email_pelajar, complyted_exam.exam_name, CASE ".$wpdb->prefix."exam_poin.status WHEN 0 THEN 'FAILED' WHEN 1 THEN 'PASS' END AS Status FROM ".$wpdb->prefix."exam_poin JOIN complyted_exam ON complyted_exam.id = ".$wpdb->prefix."exam_poin.exam_id JOIN ".$wpdb->prefix."registered_pelajar
+ON ".$wpdb->prefix."registered_pelajar.id = ".$wpdb->prefix."exam_poin.participan_id ORDER BY ".$wpdb->prefix."registered_pelajar.id LIMIT $offset, $limit";
 $entries = $wpdb->get_results( $sql_oke );
     $page_links = paginate_links( array(
     'base' => add_query_arg( 'pagenum', '%#%' ),

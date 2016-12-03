@@ -39,7 +39,7 @@ $offset = ( $pagenum - 1 ) * $limit;
 $total = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE pengajar = '$current_user->user_login'" );
 
 $num_of_pages = ceil( $total / $limit );
-$entries = $wpdb->get_results( "SELECT * FROM wp_registered_pelajar WHERE pengajar = '$current_user->user_login' LIMIT $offset, $limit" );
+$entries = $wpdb->get_results( "SELECT * FROM ".$wpdb->prefix."registered_pelajar WHERE pengajar = '$current_user->user_login' LIMIT $offset, $limit" );
     $page_links = paginate_links( array(
     'base' => add_query_arg( 'pagenum', '%#%' ),
     'format' => '',
@@ -111,9 +111,9 @@ $entries = $wpdb->get_results( "SELECT * FROM wp_registered_pelajar WHERE pengaj
 				echo '<h3>Belum ada pelajar yang melengkapi data <i>Course</i> !</h3>';
 				}
 }else{
-$total = $wpdb->get_var( "SELECT COUNT(*) FROM wp_registered_pelajar WHERE pengajar = '$current_user->user_login'" );
+$total = $wpdb->get_var( "SELECT COUNT(*) FROM ".$wpdb->prefix."registered_pelajar WHERE pengajar = '$current_user->user_login'" );
 
-$entries = $wpdb->get_results( "SELECT * FROM wp_registered_pelajar WHERE pengajar = '$current_user->user_login' AND email_pelajar LIKE '%".$_POST['search']."%' OR nama_pelajar LIKE '%".$_POST['search']."%'" );
+$entries = $wpdb->get_results( "SELECT * FROM ".$wpdb->prefix."registered_pelajar WHERE pengajar = '$current_user->user_login' AND email_pelajar LIKE '%".$_POST['search']."%' OR nama_pelajar LIKE '%".$_POST['search']."%'" );
 // print_r($entries);
 ?>
 <table class='wp-list-table widefat fixed striped posts'>

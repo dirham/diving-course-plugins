@@ -75,11 +75,11 @@ function draf_course_update_course() {
         <h2>Edit your course - (<?php echo $pengajar; ?>)</h2>
         <?php if ($_POST['delete']) { ?>
             <div class="updated"><p>Course deleted</p></div>
-            <a href="<?php echo admin_url('admin.php?page=draf_course_list_view') ?>">&laquo; Back to course list</a>
+            <a href="javascript:history.go(-1)">&laquo; Back</a>
 
         <?php } else if ($_POST['update']) { ?>
             <div class="updated"><p>Course updated</p></div>
-            <a href="<?php echo admin_url('admin.php?page=draf_course_list_view') ?>">&laquo; Back to course list</a>
+            <a href="javascript:history.go(-1)">&laquo; Back</a>
 
         <?php } else { ?>
             <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
